@@ -28,7 +28,7 @@
   body {
     margin: 0;
     min-height: 100vh;
-    padding: 92px 18px 56px;
+    padding: 132px 18px 56px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -114,6 +114,61 @@
     background: #27483d;
   }
 
+  /* ---------- Music player ---------- */
+  .music-bar {
+    position: fixed;
+    top: 68px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 12px 7px 7px;
+    border-radius: 999px;
+    background: rgba(6, 34, 29, .9);
+    border: 1px solid rgba(243, 201, 105, .55);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .38);
+    backdrop-filter: blur(6px);
+  }
+  .music-btn {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(243, 201, 105, .7);
+    background: linear-gradient(180deg, #ffe4a3, var(--gold));
+    color: #4a1019;
+    cursor: pointer;
+    transition: transform .15s ease, filter .15s ease;
+  }
+  .music-btn:hover { transform: translateY(-1px); filter: brightness(1.07); }
+  .music-btn:focus-visible { outline: 3px solid var(--gold-soft); outline-offset: 2px; }
+  .music-btn.secondary { background: rgba(22, 84, 64, .95); color: var(--cream); }
+  .music-btn svg { width: 15px; height: 15px; fill: currentColor; }
+  .icon-pause, .music-bar.is-playing .icon-play { display: none; }
+  .music-bar.is-playing .icon-pause { display: block; }
+  .music-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; line-height: 1.2; }
+  .music-label {
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(243, 201, 105, .9);
+  }
+  .track-name {
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--cream);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+
   /* ---------- Candy-cane frame and card ---------- */
   .frame {
     position: relative;
@@ -139,7 +194,6 @@
       linear-gradient(165deg, #0a382d, #061f1f);
     border: 1px solid rgba(243, 201, 105, .6);
     box-shadow: inset 0 0 0 6px rgba(243, 201, 105, .09), inset 0 0 60px rgba(0, 0, 0, .35);
-    overflow: hidden;
   }
   .card::before, .card::after {
     content: "";
@@ -151,8 +205,8 @@
     background-size: contain;
     pointer-events: none;
   }
-  .card::before { top: -8px; left: -8px; transform: rotate(-28deg); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100'%3E%3Cpath d='M58 62C40 62 18 52 10 30c12-12 28-10 38-4 8 5 12 18 10 36z' fill='%232f9b62' stroke='%23165a3c' stroke-width='2'/%3E%3Cpath d='M62 62c18 0 40-10 48-32-12-12-28-10-38-4-8 5-12 18-10 36z' fill='%23217a4c' stroke='%23165a3c' stroke-width='2'/%3E%3Cg fill='%23d6203b'%3E%3Ccircle cx='54' cy='72' r='9'/%3E%3Ccircle cx='70' cy='74' r='8'/%3E%3Ccircle cx='62' cy='86' r='7'/%3E%3C/g%3E%3C/svg%3E"); }
-  .card::after { bottom: -8px; right: -8px; transform: rotate(152deg); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100'%3E%3Cpath d='M58 62C40 62 18 52 10 30c12-12 28-10 38-4 8 5 12 18 10 36z' fill='%232f9b62' stroke='%23165a3c' stroke-width='2'/%3E%3Cpath d='M62 62c18 0 40-10 48-32-12-12-28-10-38-4-8 5-12 18-10 36z' fill='%23217a4c' stroke='%23165a3c' stroke-width='2'/%3E%3Cg fill='%23d6203b'%3E%3Ccircle cx='54' cy='72' r='9'/%3E%3Ccircle cx='70' cy='74' r='8'/%3E%3Ccircle cx='62' cy='86' r='7'/%3E%3C/g%3E%3C/svg%3E"); }
+  .card::before { top: 0; left: 0; transform: rotate(-28deg); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100'%3E%3Cpath d='M58 62C40 62 18 52 10 30c12-12 28-10 38-4 8 5 12 18 10 36z' fill='%232f9b62' stroke='%23165a3c' stroke-width='2'/%3E%3Cpath d='M62 62c18 0 40-10 48-32-12-12-28-10-38-4-8 5-12 18-10 36z' fill='%23217a4c' stroke='%23165a3c' stroke-width='2'/%3E%3Cg fill='%23d6203b'%3E%3Ccircle cx='54' cy='72' r='9'/%3E%3Ccircle cx='70' cy='74' r='8'/%3E%3Ccircle cx='62' cy='86' r='7'/%3E%3C/g%3E%3C/svg%3E"); }
+  .card::after { bottom: 0; right: 0; transform: rotate(152deg); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100'%3E%3Cpath d='M58 62C40 62 18 52 10 30c12-12 28-10 38-4 8 5 12 18 10 36z' fill='%232f9b62' stroke='%23165a3c' stroke-width='2'/%3E%3Cpath d='M62 62c18 0 40-10 48-32-12-12-28-10-38-4-8 5-12 18-10 36z' fill='%23217a4c' stroke='%23165a3c' stroke-width='2'/%3E%3Cg fill='%23d6203b'%3E%3Ccircle cx='54' cy='72' r='9'/%3E%3Ccircle cx='70' cy='74' r='8'/%3E%3Ccircle cx='62' cy='86' r='7'/%3E%3C/g%3E%3C/svg%3E"); }
 
   .eyebrow {
     margin: 0 0 6px;
@@ -164,6 +218,7 @@
   }
 
   h1 {
+    --drop: -100vh;
     margin: 0;
     font-family: "Mountains of Christmas", "Georgia", serif;
     font-weight: 700;
@@ -173,6 +228,7 @@
     text-shadow: 0 3px 0 rgba(200, 16, 46, .35), 0 0 26px rgba(243, 201, 105, .28);
   }
   h1 span { color: var(--gold-soft); }
+  h1.drop-in { animation: titleDrop 5s linear both; }
 
   .divider {
     display: flex;
@@ -290,6 +346,16 @@
   }
 
   /* ---------- Animations ---------- */
+  @keyframes titleDrop {
+    0%   { transform: translateY(var(--drop)); animation-timing-function: cubic-bezier(.55, .02, .9, .4); }
+    52%  { transform: translateY(0); animation-timing-function: cubic-bezier(.2, .75, .35, 1); }
+    64%  { transform: translateY(-54px); animation-timing-function: cubic-bezier(.55, .02, .9, .4); }
+    76%  { transform: translateY(0); animation-timing-function: cubic-bezier(.2, .75, .35, 1); }
+    85%  { transform: translateY(-22px); animation-timing-function: cubic-bezier(.55, .02, .9, .4); }
+    92%  { transform: translateY(0); animation-timing-function: cubic-bezier(.2, .75, .35, 1); }
+    96%  { transform: translateY(-7px); animation-timing-function: cubic-bezier(.55, .02, .9, .4); }
+    100% { transform: translateY(0); }
+  }
   @keyframes fall {
     from { transform: translate3d(0, -10vh, 0); }
     to { transform: translate3d(var(--drift), 112vh, 0); }
@@ -298,16 +364,20 @@
   @keyframes breathe { from { transform: scale(.94); opacity: .65; } to { transform: scale(1.06); opacity: 1; } }
 
   @media (max-width: 520px) {
-    body { padding: 76px 12px 32px; }
+    body { padding: 116px 12px 32px; }
     .frame { padding: 9px; border-radius: 24px; }
     .card { border-radius: 16px; }
     .card::before, .card::after { width: 56px; height: 56px; }
+    .music-bar { top: 62px; gap: 9px; padding: 6px 10px 6px 6px; }
+    .music-btn { width: 32px; height: 32px; }
+    .track-name { font-size: .74rem; max-width: 168px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .snow, .stars, .halo { animation: none; }
     .snow, .stars { display: none; }
     .bulb { animation: none; opacity: .9; }
+    h1.drop-in { animation: none; }
   }
 </style>
 </head>
@@ -340,6 +410,20 @@
     </svg>
   </div>
 
+  <div class="music-bar" id="musicBar" role="group" aria-label="Music player">
+    <button type="button" class="music-btn" id="musicToggle" aria-label="Play music">
+      <svg class="icon-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>
+      <svg class="icon-pause" viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 2.5h3v11h-3zm6 0h3v11h-3z"/></svg>
+    </button>
+    <div class="music-meta">
+      <span class="music-label" id="musicStatus">Music paused</span>
+      <span class="track-name" id="trackName">Happy Birthday (Instrumental)</span>
+    </div>
+    <button type="button" class="music-btn secondary" id="musicNext" aria-label="Next track">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2.5v11l8-5.5zM11 2.5h2.5v11H11z"/></svg>
+    </button>
+  </div>
+
   <main class="frame">
     <div class="card">
       <p class="eyebrow">Merry Christmas &amp; Warmest Wishes</p>
@@ -358,7 +442,7 @@
         <div class="halo" aria-hidden="true"></div>
         <div class="portrait" id="portrait">
           <div class="portrait-inner">
-            <img id="avatar" src="image.jpg" alt="Portrait of the birthday friend">
+            <img id="avatar" src="images/image.jpg" alt="Portrait of the birthday friend">
             <div class="avatar-fallback" id="avatarFallback" hidden>
               <svg viewBox="0 0 60 76" aria-hidden="true">
                 <rect x="27" y="62" width="6" height="12" fill="#7a4a27"/>
@@ -371,7 +455,7 @@
                 <circle cx="30" cy="34" r="2.5" fill="#fff6e5"/>
               </svg>
               <strong>Your photo goes here</strong>
-              <small>Add image.jpg to this folder</small>
+              <small>Add image.jpg to the images folder</small>
             </div>
           </div>
         </div>
@@ -431,12 +515,23 @@
       lights.appendChild(bulb);
     }
 
-    /* Fallback shown until image.jpg is added */
+    /* Look for the photo in the images folder, then in the project root */
     var avatar = document.getElementById("avatar");
     var fallback = document.getElementById("avatarFallback");
-    var showFallback = function () { avatar.hidden = true; fallback.hidden = false; };
-    avatar.addEventListener("error", showFallback);
-    if (avatar.complete && avatar.naturalWidth === 0) { showFallback(); }
+    var photoSources = ["images/image.jpg", "image.jpg"];
+    var photoIndex = 0;
+    avatar.addEventListener("error", function () {
+      photoIndex++;
+      if (photoIndex < photoSources.length) {
+        avatar.src = photoSources[photoIndex];
+      } else {
+        avatar.hidden = true;
+        fallback.hidden = false;
+      }
+    });
+    if (avatar.complete && avatar.naturalWidth === 0) {
+      avatar.dispatchEvent(new Event("error"));
+    }
 
     /* Fixed rotation at 0.75x speed: 9 degrees per second, one turn every 40 s */
     var BASE_DPS = 12;
@@ -457,6 +552,76 @@
     }
 
     requestAnimationFrame(frame);
+
+    /* Title drops in from the top of the browser over 5 seconds */
+    var title = document.querySelector("h1");
+    var dropStarted = false;
+    function startTitleDrop() {
+      if (dropStarted) { return; }
+      dropStarted = true;
+      var box = title.getBoundingClientRect();
+      title.style.setProperty("--drop", "-" + Math.ceil(box.top + box.height + 24) + "px");
+      title.classList.add("drop-in");
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(startTitleDrop);
+      setTimeout(startTitleDrop, 1500);
+    } else {
+      window.addEventListener("load", startTitleDrop);
+    }
+
+    /* Music player: instrumental tracks stored in the music folder */
+    var tracks = [
+      { name: "Happy Birthday (Instrumental)", src: "music/happy-birthday.wav" },
+      { name: "Jingle Bells (Instrumental)", src: "music/jingle-bells.wav" },
+      { name: "Silent Night (Instrumental)", src: "music/silent-night.wav" }
+    ];
+    var musicBar = document.getElementById("musicBar");
+    var musicToggle = document.getElementById("musicToggle");
+    var musicNext = document.getElementById("musicNext");
+    var musicStatus = document.getElementById("musicStatus");
+    var trackName = document.getElementById("trackName");
+    var audio = new Audio();
+    audio.volume = 0.55;
+    audio.preload = "none";
+    var trackIndex = 0;
+
+    function updateMusicUI() {
+      var isPlaying = !audio.paused;
+      musicBar.classList.toggle("is-playing", isPlaying);
+      musicStatus.textContent = isPlaying ? "Now playing" : "Music paused";
+      musicToggle.setAttribute("aria-label", isPlaying ? "Pause music" : "Play music");
+    }
+
+    function startPlayback() {
+      var result = audio.play();
+      if (result && result.catch) {
+        result.catch(function () {
+          musicStatus.textContent = "Tap play to start";
+          musicBar.classList.remove("is-playing");
+        });
+      }
+    }
+
+    function loadTrack(i, shouldPlay) {
+      trackIndex = (i + tracks.length) % tracks.length;
+      trackName.textContent = tracks[trackIndex].name;
+      audio.src = tracks[trackIndex].src;
+      if (shouldPlay) { startPlayback(); } else { updateMusicUI(); }
+    }
+
+    musicToggle.addEventListener("click", function () {
+      if (audio.paused) { startPlayback(); } else { audio.pause(); }
+    });
+    musicNext.addEventListener("click", function () { loadTrack(trackIndex + 1, true); });
+    audio.addEventListener("play", updateMusicUI);
+    audio.addEventListener("pause", updateMusicUI);
+    audio.addEventListener("ended", function () { loadTrack(trackIndex + 1, true); });
+    audio.addEventListener("error", function () {
+      musicStatus.textContent = "Audio unavailable";
+      musicBar.classList.remove("is-playing");
+    });
+    loadTrack(0, false);
   })();
 </script>
 </body>
