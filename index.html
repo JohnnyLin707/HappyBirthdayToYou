@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy Birthday, My Friend | A Christmas Wish</title>
+<meta name="description" content="A Christmas-themed birthday wish for a dear friend.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #071a24;
+    --pine: #0b3b31;
+    --pine-deep: #08261f;
+    --red: #c8102e;
+    --red-bright: #e63946;
+    --gold: #f3c969;
+    --gold-soft: #ffe4a3;
+    --cream: #fff6e5;
+    --ink: #10261f;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { min-height: 100%; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 92px 18px 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Nunito", "Trebuchet MS", system-ui, sans-serif;
+    color: var(--cream);
+    background:
+      radial-gradient(1100px 620px at 50% -8%, rgba(55, 122, 96, .55), transparent 70%),
+      radial-gradient(700px 500px at 8% 90%, rgba(12, 74, 62, .7), transparent 70%),
+      radial-gradient(700px 500px at 92% 88%, rgba(20, 62, 88, .6), transparent 70%),
+      linear-gradient(180deg, #06202a 0%, #0a302b 48%, #061a20 100%);
+    overflow-x: hidden;
+  }
+
+  /* ---------- Night sky, stars, snow and trees ---------- */
+  .sky, .stars, .snow, .ground { position: fixed; inset: 0; pointer-events: none; }
+  .sky { z-index: 0; overflow: hidden; }
+
+  .stars { opacity: .8; }
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 6px 1px rgba(255, 240, 200, .8);
+    animation: twinkle var(--t) ease-in-out var(--delay) infinite alternate;
+  }
+
+  .snow { z-index: 1; }
+  .flake {
+    position: absolute;
+    top: -8vh;
+    left: var(--x);
+    width: var(--s);
+    height: var(--s);
+    border-radius: 50%;
+    background: #fff;
+    opacity: var(--o);
+    animation: fall var(--d) linear var(--delay) infinite;
+  }
+
+  .ground {
+    top: auto;
+    height: 120px;
+    background: linear-gradient(0deg, rgba(226, 240, 238, .16), transparent);
+    border-radius: 50% 50% 0 0 / 40% 40% 0 0;
+  }
+
+  .pine { position: absolute; bottom: -8px; width: clamp(130px, 20vw, 260px); height: auto; opacity: .82; }
+  .pine-left { left: -22px; transform: scaleX(-1); }
+  .pine-right { right: -26px; }
+
+  /* ---------- String of Christmas lights ---------- */
+  .lights {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 62px;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .wire { position: absolute; inset: 0; width: 100%; height: 62px; }
+  .wire path { fill: none; stroke: rgba(9, 38, 34, .95); stroke-width: 2px; vector-effect: non-scaling-stroke; }
+  .bulb {
+    position: absolute;
+    width: 11px;
+    height: 15px;
+    transform: translateX(-50%);
+    border-radius: 50% 50% 45% 45%;
+    background: radial-gradient(circle at 34% 28%, #fff 0%, var(--color) 58%, var(--color) 100%);
+    box-shadow: 0 0 9px 2px var(--color), 0 0 22px 5px var(--color);
+    animation: twinkle 1.7s ease-in-out infinite alternate;
+  }
+  .bulb::before {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: -7px;
+    width: 5px;
+    height: 7px;
+    border-radius: 2px;
+    background: #27483d;
+  }
+
+  /* ---------- Candy-cane frame and card ---------- */
+  .frame {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 760px);
+    padding: 13px;
+    border-radius: 30px;
+    background: repeating-linear-gradient(135deg,
+      var(--cream) 0 13px,
+      #f5ead6 13px 16px,
+      var(--red) 16px 29px,
+      #a50d24 29px 32px);
+    box-shadow: 0 26px 70px rgba(0, 0, 0, .55), 0 0 0 1px rgba(255, 255, 255, .16);
+  }
+
+  .card {
+    position: relative;
+    padding: clamp(26px, 5vw, 44px) clamp(20px, 5vw, 46px) 34px;
+    border-radius: 19px;
+    text-align: center;
+    background:
+      radial-gradient(600px 320px at 50% 0%, rgba(38, 105, 79, .55), transparent 72%),
+      linear-gradient(165deg, #0a382d, #061f1f);
+    border: 1px solid rgba(243, 201, 105, .6);
+    box-shadow: inset 0 0 0 6px rgba(243, 201, 105, .09), inset 0 0 60px rgba(0, 0, 0, .35);
+    overflow: hidden;
+  }
+  .card::before, .card::after {
+    content: "";
+    position: absolute;
+    width: 76px;
+    height: 76px;
+    opacity: .95;
+    background-repeat: no-repeat;
+    background-size: contain;
+    pointer-events: none;
+  }
+  .card::before { top: -8px; left: -8px; transform: rotate(-28deg); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100'%3E%3Cpath d='M58 62C40 62 18 52 10 30c12-12 28-10 38-4 8 5 12 18 10 36z' fill='%232f9b62' stroke='%23165a3c' stroke-width='2'/%3E%3Cpath d='M62 62c18 0 40-10 48-32-12-12-28-10-38-4-8 5-12 18-10 36z' fill='%23217a4c' stroke='%23165a3c' stroke-width='2'/%3E%3Cg fill='%23d6203b'%3E%3Ccircle cx='54' cy='72' r='9'/%3E%3Ccircle cx='70' cy='74' r='8'/%3E%3Ccircle cx='62' cy='86' r='7'/%3E%3C/g%3E%3C/svg%3E"); }
+  .card::after { bottom: -8px; right: -8px; transform: rotate(152deg); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 100'%3E%3Cpath d='M58 62C40 62 18 52 10 30c12-12 28-10 38-4 8 5 12 18 10 36z' fill='%232f9b62' stroke='%23165a3c' stroke-width='2'/%3E%3Cpath d='M62 62c18 0 40-10 48-32-12-12-28-10-38-4-8 5-12 18-10 36z' fill='%23217a4c' stroke='%23165a3c' stroke-width='2'/%3E%3Cg fill='%23d6203b'%3E%3Ccircle cx='54' cy='72' r='9'/%3E%3Ccircle cx='70' cy='74' r='8'/%3E%3Ccircle cx='62' cy='86' r='7'/%3E%3C/g%3E%3C/svg%3E"); }
+
+  .eyebrow {
+    margin: 0 0 6px;
+    font-size: clamp(.7rem, 2vw, .82rem);
+    font-weight: 800;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  h1 {
+    margin: 0;
+    font-family: "Mountains of Christmas", "Georgia", serif;
+    font-weight: 700;
+    font-size: clamp(2.5rem, 8vw, 4.4rem);
+    line-height: 1.02;
+    color: var(--cream);
+    text-shadow: 0 3px 0 rgba(200, 16, 46, .35), 0 0 26px rgba(243, 201, 105, .28);
+  }
+  h1 span { color: var(--gold-soft); }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 14px auto 12px;
+    color: var(--gold);
+  }
+  .divider::before, .divider::after {
+    content: "";
+    width: clamp(38px, 12vw, 96px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(243, 201, 105, .8), transparent);
+  }
+
+  .message {
+    max-width: 520px;
+    margin: 0 auto;
+    font-size: clamp(.94rem, 2.2vw, 1.06rem);
+    line-height: 1.75;
+    color: rgba(255, 246, 229, .86);
+  }
+
+  /* ---------- Rotating portrait ---------- */
+  .stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    margin: 30px auto 26px;
+  }
+  .halo {
+    position: absolute;
+    width: clamp(260px, 46vw, 380px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(243, 201, 105, .28), rgba(243, 201, 105, .07) 55%, transparent 72%);
+    animation: breathe 5s ease-in-out infinite alternate;
+  }
+
+  .portrait {
+    position: relative;
+    width: clamp(214px, 38vw, 300px);
+    aspect-ratio: 1;
+    padding: 13px;
+    border-radius: 50%;
+    background: repeating-linear-gradient(45deg,
+      var(--cream) 0 10px,
+      #f2e7d1 10px 12px,
+      var(--red) 12px 22px,
+      #a50d24 22px 24px);
+    box-shadow:
+      0 0 0 7px rgba(243, 201, 105, .38),
+      0 0 0 13px rgba(9, 58, 44, .95),
+      0 0 44px 8px rgba(243, 201, 105, .22),
+      inset 0 0 12px rgba(0, 0, 0, .3);
+    will-change: transform;
+  }
+  .portrait::after {
+    content: "";
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    width: 22px;
+    height: 22px;
+    transform: translateX(-50%);
+    background: var(--gold);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    filter: drop-shadow(0 0 8px rgba(243, 201, 105, .9));
+  }
+
+  .portrait-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid var(--gold);
+    background: radial-gradient(circle at 50% 30%, #1c6a4f, #0a352c 75%);
+  }
+  .portrait-inner img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  [hidden] { display: none !important; }
+
+  .avatar-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 18px;
+    text-align: center;
+    background: radial-gradient(circle at 50% 25%, rgba(255, 246, 229, .16), transparent 70%);
+  }
+  .avatar-fallback svg { width: 58px; height: 72px; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .35)); }
+  .avatar-fallback strong {
+    font-family: "Mountains of Christmas", Georgia, serif;
+    font-size: 1.35rem;
+    color: var(--gold-soft);
+    line-height: 1.1;
+  }
+  .avatar-fallback small { font-size: .72rem; letter-spacing: .06em; color: rgba(255, 246, 229, .7); }
+
+  /* ---------- Speed controls ---------- */
+  .controls {
+    position: relative;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 18px 16px 16px;
+    border-radius: 18px;
+    background: rgba(4, 26, 24, .55);
+    border: 1px solid rgba(243, 201, 105, .28);
+  }
+  .controls-title {
+    margin: 0 0 14px;
+    font-family: "Mountains of Christmas", Georgia, serif;
+    font-size: 1.45rem;
+    color: var(--gold-soft);
+  }
+  .controls-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+
+  button {
+    font: inherit;
+    font-size: .88rem;
+    font-weight: 800;
+    letter-spacing: .02em;
+    padding: 10px 17px;
+    border-radius: 999px;
+    color: var(--cream);
+    background: linear-gradient(180deg, rgba(38, 105, 79, .95), rgba(13, 61, 48, .95));
+    border: 1px solid rgba(243, 201, 105, .55);
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0, 0, 0, .35); }
+  button:active:not(:disabled) { transform: translateY(0); }
+  button:focus-visible { outline: 3px solid var(--gold-soft); outline-offset: 3px; }
+  button:disabled { opacity: .42; cursor: not-allowed; }
+  button.primary {
+    color: #4a1019;
+    background: linear-gradient(180deg, #ffe4a3, var(--gold));
+    border-color: #ffe4a3;
+    min-width: 108px;
+  }
+
+  .readout {
+    margin: 14px 0 0;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: rgba(255, 246, 229, .78);
+  }
+  .readout .dot { margin: 0 8px; color: var(--gold); }
+  .readout .state { color: #8fe3b0; }
+  .readout .state.paused { color: #ffb4a8; }
+
+  .footer {
+    margin: 24px 0 0;
+    font-size: .88rem;
+    color: rgba(255, 246, 229, .66);
+    font-style: italic;
+  }
+
+  /* ---------- Animations ---------- */
+  @keyframes fall {
+    from { transform: translate3d(0, -10vh, 0); }
+    to { transform: translate3d(var(--drift), 112vh, 0); }
+  }
+  @keyframes twinkle { from { opacity: .3; } to { opacity: 1; } }
+  @keyframes breathe { from { transform: scale(.94); opacity: .65; } to { transform: scale(1.06); opacity: 1; } }
+
+  @media (max-width: 520px) {
+    body { padding: 76px 12px 32px; }
+    .frame { padding: 9px; border-radius: 24px; }
+    .card { border-radius: 16px; }
+    .card::before, .card::after { width: 56px; height: 56px; }
+    button { padding: 9px 13px; font-size: .8rem; }
+    .controls { padding: 16px 10px 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .snow, .stars, .halo { animation: none; }
+    .snow, .stars { display: none; }
+    .bulb { animation: none; opacity: .9; }
+  }
+</style>
+</head>
+<body>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="pine" viewBox="0 0 160 220">
+      <rect x="71" y="182" width="18" height="36" rx="3" fill="#4a2f1d"/>
+      <path d="M80 6 38 84h84z" fill="#14593d"/>
+      <path d="M80 6 62 40h36z" fill="#e9f5ef" opacity=".72"/>
+      <path d="M80 52 27 138h106z" fill="#0f4b34"/>
+      <path d="M80 52 57 94h46z" fill="#e9f5ef" opacity=".6"/>
+      <path d="M80 106 16 196h128z" fill="#0b3d2b"/>
+      <path d="M80 106 52 152h56z" fill="#e9f5ef" opacity=".55"/>
+      <circle cx="80" cy="5" r="5" fill="#f3c969"/>
+    </symbol>
+  </svg>
+
+  <div class="sky" aria-hidden="true">
+    <div class="stars" id="stars"></div>
+    <svg class="pine pine-left"><use href="#pine"></use></svg>
+    <svg class="pine pine-right"><use href="#pine"></use></svg>
+    <div class="ground"></div>
+  </div>
+  <div class="snow" id="snow" aria-hidden="true"></div>
+
+  <div class="lights" id="lights" aria-hidden="true">
+    <svg class="wire" viewBox="0 0 1000 62" preserveAspectRatio="none">
+      <path d="M0 4 Q500 74 1000 4"></path>
+    </svg>
+  </div>
+
+  <main class="frame">
+    <div class="card">
+      <p class="eyebrow">Merry Christmas &amp; Warmest Wishes</p>
+      <h1>Happy Birthday,<br><span>My Dear Friend!</span></h1>
+
+      <div class="divider" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 100 100" fill="none" stroke="#f3c969" stroke-width="6" stroke-linecap="round">
+          <path d="M50 8v84M14 29l72 42M14 71l72-42"/>
+        </svg>
+      </div>
+
+      <p class="message">Under the twinkling lights and falling snow, today is all about you.<br>
+        Wishing you a birthday as warm and bright as Christmas morning.</p>
+
+      <div class="stage">
+        <div class="halo" aria-hidden="true"></div>
+        <div class="portrait" id="portrait">
+          <div class="portrait-inner">
+            <img id="avatar" src="image.jpg" alt="Portrait of the birthday friend">
+            <div class="avatar-fallback" id="avatarFallback" hidden>
+              <svg viewBox="0 0 60 76" aria-hidden="true">
+                <rect x="27" y="62" width="6" height="12" fill="#7a4a27"/>
+                <path d="M30 2 12 34h36z" fill="#2f9b62"/>
+                <path d="M30 22 7 54h46z" fill="#217a4c"/>
+                <path d="M30 2 20 20h20z" fill="#fff6e5" opacity=".85"/>
+                <circle cx="30" cy="2" r="4" fill="#f3c969"/>
+                <circle cx="18" cy="42" r="2.5" fill="#e63946"/>
+                <circle cx="40" cy="49" r="2.5" fill="#f3c969"/>
+                <circle cx="30" cy="34" r="2.5" fill="#fff6e5"/>
+              </svg>
+              <strong>Your photo goes here</strong>
+              <small>Add image.jpg to this folder</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="controls" aria-label="Rotation speed controls">
+        <p class="controls-title">Spin the Christmas Wreath</p>
+        <div class="controls-row">
+          <button type="button" id="slower">&minus; Slower</button>
+          <button type="button" id="toggle" class="primary" aria-pressed="false">Pause</button>
+          <button type="button" id="faster">Faster +</button>
+          <button type="button" id="reset">Reset</button>
+        </div>
+        <p class="readout" aria-live="polite">
+          <span class="state" id="stateLabel">Spinning</span>
+          <span class="dot">&bull;</span>
+          <span id="speedLabel">Speed 1x</span>
+          <span class="dot">&bull;</span>
+          <span id="turnLabel">One turn every 30 s</span>
+        </p>
+      </section>
+
+      <p class="footer">May your year ahead be merry, bright &amp; full of little miracles.</p>
+    </div>
+  </main>
+
+<script>
+  (function () {
+    "use strict";
+
+    var rand = function (min, max) { return Math.random() * (max - min) + min; };
+
+    /* Stars and snowflakes */
+    var stars = document.getElementById("stars");
+    var starFrag = document.createDocumentFragment();
+    for (var i = 0; i < 55; i++) {
+      var star = document.createElement("span");
+      star.className = "star";
+      star.style.left = rand(0, 100).toFixed(2) + "%";
+      star.style.top = rand(0, 78).toFixed(2) + "%";
+      star.style.setProperty("--t", rand(1.6, 4.5).toFixed(2) + "s");
+      star.style.setProperty("--delay", (-rand(0, 4)).toFixed(2) + "s");
+      starFrag.appendChild(star);
+    }
+    stars.appendChild(starFrag);
+
+    var snow = document.getElementById("snow");
+    var snowFrag = document.createDocumentFragment();
+    for (var j = 0; j < 46; j++) {
+      var flake = document.createElement("span");
+      flake.className = "flake";
+      flake.style.setProperty("--x", rand(0, 100).toFixed(2) + "%");
+      flake.style.setProperty("--s", rand(2, 7).toFixed(1) + "px");
+      flake.style.setProperty("--d", rand(9, 20).toFixed(1) + "s");
+      flake.style.setProperty("--delay", (-rand(0, 20)).toFixed(1) + "s");
+      flake.style.setProperty("--drift", rand(-90, 90).toFixed(0) + "px");
+      flake.style.setProperty("--o", rand(0.3, 0.9).toFixed(2));
+      snowFrag.appendChild(flake);
+    }
+    snow.appendChild(snowFrag);
+
+    /* Bulbs hanging from a sagging wire */
+    var lights = document.getElementById("lights");
+    var colors = ["#ff4d5a", "#ffd166", "#5ce49a", "#7cc7ff", "#fff4d6"];
+    var bulbCount = 19;
+    for (var k = 0; k < bulbCount; k++) {
+      var t = k / (bulbCount - 1);
+      var bulb = document.createElement("span");
+      bulb.className = "bulb";
+      bulb.style.left = (t * 100).toFixed(2) + "%";
+      bulb.style.top = (4 + 132 * t * (1 - t) + 6).toFixed(1) + "px";
+      bulb.style.setProperty("--color", colors[k % colors.length]);
+      bulb.style.animationDelay = (k * 0.19).toFixed(2) + "s";
+      lights.appendChild(bulb);
+    }
+
+    /* Fallback shown until image.jpg is added */
+    var avatar = document.getElementById("avatar");
+    var fallback = document.getElementById("avatarFallback");
+    var showFallback = function () { avatar.hidden = true; fallback.hidden = false; };
+    avatar.addEventListener("error", showFallback);
+    if (avatar.complete && avatar.naturalWidth === 0) { showFallback(); }
+
+    /* Rotation: degrees per second, so speed changes stay smooth */
+    var BASE_DPS = 12;
+    var STEPS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 6];
+    var DEFAULT_INDEX = 3;
+    var stepIndex = DEFAULT_INDEX;
+    var running = true;
+    var angle = 0;
+    var lastTime = null;
+
+    var portrait = document.getElementById("portrait");
+    var slower = document.getElementById("slower");
+    var faster = document.getElementById("faster");
+    var toggle = document.getElementById("toggle");
+    var reset = document.getElementById("reset");
+    var stateLabel = document.getElementById("stateLabel");
+    var speedLabel = document.getElementById("speedLabel");
+    var turnLabel = document.getElementById("turnLabel");
+
+    function updateUI() {
+      var multiplier = STEPS[stepIndex];
+      var seconds = 360 / (BASE_DPS * multiplier);
+      speedLabel.textContent = "Speed " + multiplier + "x";
+      turnLabel.textContent = "One turn every " + (Number.isInteger(seconds) ? seconds : seconds.toFixed(1)) + " s";
+      stateLabel.textContent = running ? "Spinning" : "Paused";
+      stateLabel.classList.toggle("paused", !running);
+      toggle.textContent = running ? "Pause" : "Resume";
+      toggle.setAttribute("aria-pressed", String(!running));
+      slower.disabled = stepIndex === 0;
+      faster.disabled = stepIndex === STEPS.length - 1;
+    }
+
+    slower.addEventListener("click", function () {
+      if (stepIndex > 0) { stepIndex--; updateUI(); }
+    });
+    faster.addEventListener("click", function () {
+      if (stepIndex < STEPS.length - 1) { stepIndex++; updateUI(); }
+    });
+    toggle.addEventListener("click", function () { running = !running; updateUI(); });
+    reset.addEventListener("click", function () {
+      stepIndex = DEFAULT_INDEX;
+      running = true;
+      angle = 0;
+      portrait.style.transform = "rotate(0deg)";
+      updateUI();
+    });
+
+    function frame(time) {
+      if (lastTime !== null && running) {
+        var delta = Math.min(time - lastTime, 100);
+        angle = (angle + BASE_DPS * STEPS[stepIndex] * delta / 1000) % 360;
+        portrait.style.transform = "rotate(" + angle.toFixed(2) + "deg)";
+      }
+      lastTime = time;
+      requestAnimationFrame(frame);
+    }
+
+    updateUI();
+    requestAnimationFrame(frame);
+  })();
+</script>
+</body>
+</html>
