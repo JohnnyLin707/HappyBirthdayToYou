@@ -202,7 +202,7 @@
     position: relative;
     display: grid;
     place-items: center;
-    margin: 30px auto 26px;
+    margin: 30px auto 8px;
   }
   .halo {
     position: absolute;
@@ -282,59 +282,6 @@
   }
   .avatar-fallback small { font-size: .72rem; letter-spacing: .06em; color: rgba(255, 246, 229, .7); }
 
-  /* ---------- Speed controls ---------- */
-  .controls {
-    position: relative;
-    max-width: 520px;
-    margin: 0 auto;
-    padding: 18px 16px 16px;
-    border-radius: 18px;
-    background: rgba(4, 26, 24, .55);
-    border: 1px solid rgba(243, 201, 105, .28);
-  }
-  .controls-title {
-    margin: 0 0 14px;
-    font-family: "Mountains of Christmas", Georgia, serif;
-    font-size: 1.45rem;
-    color: var(--gold-soft);
-  }
-  .controls-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-
-  button {
-    font: inherit;
-    font-size: .88rem;
-    font-weight: 800;
-    letter-spacing: .02em;
-    padding: 10px 17px;
-    border-radius: 999px;
-    color: var(--cream);
-    background: linear-gradient(180deg, rgba(38, 105, 79, .95), rgba(13, 61, 48, .95));
-    border: 1px solid rgba(243, 201, 105, .55);
-    cursor: pointer;
-    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
-  }
-  button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0, 0, 0, .35); }
-  button:active:not(:disabled) { transform: translateY(0); }
-  button:focus-visible { outline: 3px solid var(--gold-soft); outline-offset: 3px; }
-  button:disabled { opacity: .42; cursor: not-allowed; }
-  button.primary {
-    color: #4a1019;
-    background: linear-gradient(180deg, #ffe4a3, var(--gold));
-    border-color: #ffe4a3;
-    min-width: 108px;
-  }
-
-  .readout {
-    margin: 14px 0 0;
-    font-size: .82rem;
-    font-weight: 700;
-    letter-spacing: .04em;
-    color: rgba(255, 246, 229, .78);
-  }
-  .readout .dot { margin: 0 8px; color: var(--gold); }
-  .readout .state { color: #8fe3b0; }
-  .readout .state.paused { color: #ffb4a8; }
-
   .footer {
     margin: 24px 0 0;
     font-size: .88rem;
@@ -355,8 +302,6 @@
     .frame { padding: 9px; border-radius: 24px; }
     .card { border-radius: 16px; }
     .card::before, .card::after { width: 56px; height: 56px; }
-    button { padding: 9px 13px; font-size: .8rem; }
-    .controls { padding: 16px 10px 14px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -432,23 +377,6 @@
         </div>
       </div>
 
-      <section class="controls" aria-label="Rotation speed controls">
-        <p class="controls-title">Spin the Christmas Wreath</p>
-        <div class="controls-row">
-          <button type="button" id="slower">&minus; Slower</button>
-          <button type="button" id="toggle" class="primary" aria-pressed="false">Pause</button>
-          <button type="button" id="faster">Faster +</button>
-          <button type="button" id="reset">Reset</button>
-        </div>
-        <p class="readout" aria-live="polite">
-          <span class="state" id="stateLabel">Spinning</span>
-          <span class="dot">&bull;</span>
-          <span id="speedLabel">Speed 1x</span>
-          <span class="dot">&bull;</span>
-          <span id="turnLabel">One turn every 30 s</span>
-        </p>
-      </section>
-
       <p class="footer">May your year ahead be merry, bright &amp; full of little miracles.</p>
     </div>
   </main>
@@ -510,63 +438,24 @@
     avatar.addEventListener("error", showFallback);
     if (avatar.complete && avatar.naturalWidth === 0) { showFallback(); }
 
-    /* Rotation: degrees per second, so speed changes stay smooth */
+    /* Fixed rotation at 0.75x speed: 9 degrees per second, one turn every 40 s */
     var BASE_DPS = 12;
-    var STEPS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 6];
-    var DEFAULT_INDEX = 3;
-    var stepIndex = DEFAULT_INDEX;
-    var running = true;
+    var SPEED = 0.75;
+    var degreesPerSecond = BASE_DPS * SPEED;
     var angle = 0;
     var lastTime = null;
-
     var portrait = document.getElementById("portrait");
-    var slower = document.getElementById("slower");
-    var faster = document.getElementById("faster");
-    var toggle = document.getElementById("toggle");
-    var reset = document.getElementById("reset");
-    var stateLabel = document.getElementById("stateLabel");
-    var speedLabel = document.getElementById("speedLabel");
-    var turnLabel = document.getElementById("turnLabel");
-
-    function updateUI() {
-      var multiplier = STEPS[stepIndex];
-      var seconds = 360 / (BASE_DPS * multiplier);
-      speedLabel.textContent = "Speed " + multiplier + "x";
-      turnLabel.textContent = "One turn every " + (Number.isInteger(seconds) ? seconds : seconds.toFixed(1)) + " s";
-      stateLabel.textContent = running ? "Spinning" : "Paused";
-      stateLabel.classList.toggle("paused", !running);
-      toggle.textContent = running ? "Pause" : "Resume";
-      toggle.setAttribute("aria-pressed", String(!running));
-      slower.disabled = stepIndex === 0;
-      faster.disabled = stepIndex === STEPS.length - 1;
-    }
-
-    slower.addEventListener("click", function () {
-      if (stepIndex > 0) { stepIndex--; updateUI(); }
-    });
-    faster.addEventListener("click", function () {
-      if (stepIndex < STEPS.length - 1) { stepIndex++; updateUI(); }
-    });
-    toggle.addEventListener("click", function () { running = !running; updateUI(); });
-    reset.addEventListener("click", function () {
-      stepIndex = DEFAULT_INDEX;
-      running = true;
-      angle = 0;
-      portrait.style.transform = "rotate(0deg)";
-      updateUI();
-    });
 
     function frame(time) {
-      if (lastTime !== null && running) {
+      if (lastTime !== null) {
         var delta = Math.min(time - lastTime, 100);
-        angle = (angle + BASE_DPS * STEPS[stepIndex] * delta / 1000) % 360;
+        angle = (angle + degreesPerSecond * delta / 1000) % 360;
         portrait.style.transform = "rotate(" + angle.toFixed(2) + "deg)";
       }
       lastTime = time;
       requestAnimationFrame(frame);
     }
 
-    updateUI();
     requestAnimationFrame(frame);
   })();
 </script>
